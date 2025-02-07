@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çarx Oyunu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0 20px;
+        }
+        .list {
+            width: 30%;
+        }
+        .list ol {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                red 0deg 60deg,
+                blue 60deg 120deg,
+                green 120deg 180deg,
+                yellow 180deg 240deg,
+                purple 240deg 300deg,
+                orange 300deg 360deg
+            );
+            transition: transform 10s cubic-bezier(0.25, 1, 0.5, 1); /* Daha sürətli və dinamik fırlanma */
+            position: relative;
+        }
+        .wheel span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0% 0%;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            width: 100px;
+            transform: translate(-50%, -50%) rotate(var(--rotate));
+        }
+        .marker {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        .spin-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="list">
+        <h2>İştirakçılar:</h2>
+        <ol>
+            <li>Əli</li>
+            <li>Ayşə</li>
+            <li>Mehmet</li>
+            <li>Fatma</li>
+            <li>Hüseyn</li>
+            <li>Zəhra</li>
+        </ol>
+    </div>
+    <div class="wheel-container">
+        <div class="wheel" id="wheel">
+            <!-- Çarxın üzərində adlar -->
+            <span style="--rotate: 30deg;">Əli</span>
+            <span style="--rotate: 90deg;">Ayşə</span>
+            <span style="--rotate: 150deg;">Mehmet</span>
+            <span style="--rotate: 210deg;">Fatma</span>
+            <span style="--rotate: 270deg;">Hüseyn</span>
+            <span style="--rotate: 330deg;">Zəhra</span>
+        </div>
+        <div class="marker"></div> <!-- Seçilən hissəni göstərən marker -->
+        <button class="spin-button" onclick="spinWheel()">Çarxı Fırlat</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const participants = ["Əli", "Ayşə", "Mehmet", "Fatma", "Hüseyn", "Zəhra"];
+        const wheel = document.getElementById("wheel");
+        const result = document.getElementById("result");
+
+        function spinWheel() {
+            // Təsadüfi bir bucaq seçirik (360 dərəcə * 10 tam dövrə + əlavə dərəcə)
+            const randomDegree = Math.floor(Math.random() * 360) + 3600; // 10 tam dövrə + əlavə
+            wheel.style.transform = `rotate(${randomDegree}deg)`;
+
+            // 10 saniyə sonra nəticəni göstəririk
+            setTimeout(() => {
+                const selectedIndex = Math.floor((randomDegree % 360) / (360 / participants.length));
+                const selectedPerson = participants[selectedIndex];
+                result.textContent = `Təbriklər! Seçilən: ${selectedPerson}`;
+            }, 10000); // 10 saniyə
+        }
+    </script>
+</body>
+</html>
